@@ -1,10 +1,11 @@
 package com.example.oliviermedec.pducmaterial.Fragment.ProductList;
 
-import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +21,7 @@ import java.util.List;
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
 
     private List<Product> products;
-    private Context context;
+    private Fragment parent;
 
     @Override
     public ProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -32,13 +33,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ProductsAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ProductsAdapter.ViewHolder viewHolder, final int i) {
         viewHolder.txtProductName.setText(products.get(i).nom);
         viewHolder.txtDescrition.setText(products.get(i).description);
         viewHolder.txtPrice.setText(products.get(i).prix + "€");
-        Picasso.with(context).load(context.getResources().getString(R.string.server_url) +
+        Picasso.with(parent.getContext()).load(parent.getContext().getResources().getString(R.string.server_url) +
                 "/images/" + products.get(i).image).
                 into(viewHolder.imgProduit);
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ProductsListFragment)parent).callProduct(products.get(i).id, products.get(i).nom);
+            }
+        });
     }
 
     @Override
@@ -46,9 +53,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         return products.size();
     }
 
-    public ProductsAdapter(Context context, List<Product> products){
+    public ProductsAdapter(Fragment parent, List<Product> products){
         this.products = products;
-        this.context = context;
+        this.parent = parent;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,6 +64,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         public TextView txtDescrition;
         public TextView txtPrice;
         public ImageView imgProduit;
+        public Button button;
 
         public ViewHolder(View v) {
             super(v);
@@ -64,6 +72,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             txtDescrition = (TextView)v.findViewById(R.id.txtDescription);
             txtPrice = (TextView)v.findViewById(R.id.txtPrice);
             imgProduit = (ImageView)v.findViewById(R.id.imgProduct);
+            button = (Button)v.findViewById(R.id.btnOne);
         }
     }
 }

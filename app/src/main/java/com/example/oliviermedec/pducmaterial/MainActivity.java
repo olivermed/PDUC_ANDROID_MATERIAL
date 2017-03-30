@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
+import com.example.oliviermedec.pducmaterial.Fragment.Panier.PanierFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Scanner.ScannerFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -99,8 +100,10 @@ public class MainActivity extends AppCompatActivity
             ScannerFragment scannerFragment = new ScannerFragment();
             scannerFragment.setMainActivityInstance(this);
             setFragment(scannerFragment, scannerFragment.TAG);
-        } else if (id == android.R.id.home) {
-            getSupportFragmentManager().popBackStack();
+        } else if (id == R.id.nav_pannier) {
+            PanierFragment panierFragment = new PanierFragment();
+            panierFragment.setMainActivityInstance(this);
+            setFragment(panierFragment, panierFragment.TAG);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

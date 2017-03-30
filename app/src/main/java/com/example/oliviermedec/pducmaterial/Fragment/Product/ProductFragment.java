@@ -4,13 +4,32 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.FRequirement;
+import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
+import com.example.oliviermedec.pducmaterial.Fragment.ProductList.Product;
+import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsAdapter;
+import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsListFragment;
+import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsResponse;
+import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
+import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,15 +42,18 @@ import com.example.oliviermedec.pducmaterial.R;
 public class ProductFragment extends Fragment implements FRequirement {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = ProductFragment.class.getSimpleName();
+    private static final String ID = "id";
+    private static final String NAME = "name";
     private MainActivity _instance;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String ProductId;
+    private String ProductName;
 
     private OnFragmentInteractionListener mListener;
+
+    private Cache cache = null;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -41,16 +63,16 @@ public class ProductFragment extends Fragment implements FRequirement {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param id Parameter 1.
+     * @param name Parameter 2.
      * @return A new instance of fragment ProductFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProductFragment newInstance(String param1, String param2) {
+    public static ProductFragment newInstance(String id, String name) {
         ProductFragment fragment = new ProductFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ID, id);
+        args.putString(NAME, name);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,9 +81,10 @@ public class ProductFragment extends Fragment implements FRequirement {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            ProductId = getArguments().getString(ID);
+            ProductName = getArguments().getString(NAME);
         }
+        cache = new Cache(getContext());
     }
 
     @Override
@@ -69,6 +92,57 @@ public class ProductFragment extends Fragment implements FRequirement {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
+        ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
+        final ImageView imgProduct = (ImageView)view.findViewById(R.id.ImageProduct);
+        final TextView descProduct = (TextView)view.findViewById(R.id.txtDescription);
+        final TextView priceProduct = (TextView)view.findViewById(R.id.txtPrice);
+        final TextView nameProduct = (TextView)view.findViewById(R.id.txtTitle);
+
+        Call<ProductResponse> call = productInterface.getProduct(ProductId);
+
+        call.enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse>call, Response<ProductResponse> response) {
+                if (response.body() != null) {
+                    Product product = response.body().getResult();
+                    descProduct.setText(product.description);
+                    nameProduct.setText(product.nom);
+                    priceProduct.setText(product.prix + "€");
+                    Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
+                            "/images/" + product.image).
+                            into(imgProduct);
+                    try {
+                        cache.serealize(product, ProductId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d(TAG, "L'object body est null");
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponse>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
+
+        try {
+            @SuppressWarnings("unchecked")
+            Product product = (Product)cache.deserialize(ProductId, Product.class);
+            if (product != null) {
+                descProduct.setText(product.description);
+                nameProduct.setText(product.nom);
+                priceProduct.setText(product.prix + "€");
+                Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
+                        "/images/" + product.image).
+                        into(imgProduct);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return view;
     }
 

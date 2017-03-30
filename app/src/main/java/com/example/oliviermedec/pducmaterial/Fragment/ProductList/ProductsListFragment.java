@@ -14,12 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.FRequirement;
+import com.example.oliviermedec.pducmaterial.Fragment.Categories.Categorie;
+import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
+import com.example.oliviermedec.pducmaterial.Fragment.Categories.categorieAdapter;
+import com.example.oliviermedec.pducmaterial.Fragment.Product.ProductFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
+import com.example.oliviermedec.pducmaterial.Fragment.SousCategories.SousCategorieFragment;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +45,7 @@ import retrofit2.Response;
 public class ProductsListFragment extends Fragment implements FRequirement {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "id";
     private static final String ARG_PARAM2 = "param2";
 
     private static final String TAG = ProductsListFragment.class.getSimpleName();
@@ -47,6 +54,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Product> Products = new ArrayList<>();
     private MainActivity _instance;
+    private Cache cache = null;
 
     // TODO: Rename and change types of parameters
     private String objectId;
@@ -83,6 +91,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
             objectId = getArguments().getString(ARG_PARAM1);
             objectName = getArguments().getString(ARG_PARAM2);
         }
+        cache = new Cache(getContext());
     }
 
     @Override
@@ -106,14 +115,20 @@ public class ProductsListFragment extends Fragment implements FRequirement {
             @Override
             public void onResponse(Call<ProductsResponse>call, Response<ProductsResponse> response) {
                 if (response.body() != null) {
+                    Products = new ArrayList<>();
                     List<Product> products = response.body().getResults();
                     for (Product product: products) {
                         Products.add(product);
                     }
                     Log.d(TAG, "Number of products received: " + products.size());
 
-                    mAdapter = new ProductsAdapter(getContext(), Products);
+                    mAdapter = new ProductsAdapter(ProductsListFragment.this, Products);
                     mRecyclerView.setAdapter(mAdapter);
+                    try {
+                        cache.serealize(Products, objectId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 Log.d(TAG, "L'object body est null");
             }
@@ -124,6 +139,12 @@ public class ProductsListFragment extends Fragment implements FRequirement {
                 Log.e(TAG, t.toString());
             }
         });
+
+        List<Product> products = cache.getListProduct(objectId);
+        if (products != null){
+            mAdapter = new ProductsAdapter(ProductsListFragment.this, products);
+            mRecyclerView.setAdapter(mAdapter);
+        }
         return view;
     }
 
@@ -174,5 +195,14 @@ public class ProductsListFragment extends Fragment implements FRequirement {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void callProduct(String id, String name){
+        Fragment fragment = ProductFragment.newInstance(id, name);
+        ((ProductFragment)fragment).setMainActivityInstance(_instance);
+        _instance.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)
+                .addToBackStack(SousCategorieFragment.TAG)
+                .commit();
     }
 }

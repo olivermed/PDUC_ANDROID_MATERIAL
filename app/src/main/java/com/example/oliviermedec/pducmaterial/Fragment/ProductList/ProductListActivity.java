@@ -64,8 +64,8 @@ public class ProductListActivity extends AppCompatActivity {
                     }
                     Log.d(TAG, "Number of products received: " + products.size());
 
-                    mAdapter = new ProductsAdapter(ProductListActivity.this, Products);
-                    mRecyclerView.setAdapter(mAdapter);
+                    //mAdapter = new ProductsAdapter(ProductsListFragment.this, Products);
+                    //mRecyclerView.setAdapter(mAdapter);
                 }
                 Log.d(TAG, "L'object body est null");
             }

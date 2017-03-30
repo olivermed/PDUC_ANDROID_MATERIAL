@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Catégorie" />
         <item
+            android:id="@+id/nav_pannier"
+            android:icon="@drawable/ic_shopping_cart"
+            android:title="Panier" />
+        <item
             android:id="@+id/nav_scanner"
             android:icon="@drawable/ic_menu_camera"
             android:title="Scanner" />

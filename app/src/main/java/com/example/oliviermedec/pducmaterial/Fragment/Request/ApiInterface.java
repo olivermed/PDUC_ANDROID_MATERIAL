@@ -1,6 +1,7 @@
 package com.example.oliviermedec.pducmaterial.Fragment.Request;
 
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategorieResponse;
+import com.example.oliviermedec.pducmaterial.Fragment.Product.ProductResponse;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsResponse;
 
 import retrofit2.Call;
@@ -18,7 +19,9 @@ public interface ApiInterface {
     @GET("/getSousCategorie/{idSubCat}")
     Call<CategorieResponse> getSousCategorie(@Path("idSubCat")String idSubCat);
 
-
     @GET("/getProductsBySubCat/{subCat}")
     Call<ProductsResponse> getProducts(@Path("subCat")String idSubCat);
+
+    @GET("/getProduct/{idProduct}")
+    Call<ProductResponse> getProduct(@Path("idProduct")String idProduct);
 }

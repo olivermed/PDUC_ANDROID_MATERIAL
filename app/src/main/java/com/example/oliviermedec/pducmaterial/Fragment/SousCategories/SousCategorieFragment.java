@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.Categorie;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategorieResponse;
@@ -22,6 +23,7 @@ import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,8 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
     @BindView(R.id.grid_category)
     GridView categorieGridview;
 
+    private Cache cache = null;
+
     public SousCategorieFragment() {
         // Required empty public constructor
     }
@@ -81,6 +85,7 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
         if (getArguments() != null) {
             subCatId = getArguments().getString(SUBCATID);
         }
+        cache = new Cache(getContext());
     }
 
     @Override
@@ -110,6 +115,11 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
                 Log.d(TAG, "Number of categorie received: " + categories.size());
 
                 categorieGridview.setAdapter(new categorieAdapter(SousCategorieFragment.this, Categories));
+                try {
+                    cache.serealize(Categories, subCatId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -119,7 +129,9 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
             }
         });
 
-        //categorieGridview.setAdapter(new categorieAdapter(this, Categories));
+        List<Categorie> categories = cache.getListCategory(subCatId);
+        if (categories != null)
+            categorieGridview.setAdapter(new categorieAdapter(this, categories));
         return view;
     }
 

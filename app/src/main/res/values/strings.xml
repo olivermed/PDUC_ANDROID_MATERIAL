@@ -15,4 +15,6 @@
     <string name="objectName">ObjectName</string>
 
     <string name="btnKnowMore">En savoir plus</string>
+
+    <string name="TitlePanier"><u>Panier</u></string>
 </resources>

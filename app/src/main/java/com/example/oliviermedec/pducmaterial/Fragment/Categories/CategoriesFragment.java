@@ -10,13 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
 import com.example.oliviermedec.pducmaterial.Fragment.SousCategories.SousCategorieFragment;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +53,8 @@ public class CategoriesFragment extends Fragment implements FRequirement {
     private OnFragmentInteractionListener mListener;
 
     private List<Categorie> Categories = new ArrayList<>();
+
+    private Cache cache = null;
 
     @BindView(R.id.grid_category)
     GridView categorieGridview;
@@ -98,6 +103,7 @@ public class CategoriesFragment extends Fragment implements FRequirement {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        cache = new Cache(getContext());
     }
 
     @Override
@@ -126,6 +132,11 @@ public class CategoriesFragment extends Fragment implements FRequirement {
                 Log.d(TAG, "Number of categorie received: " + categories.size());
 
                 categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
+                try {
+                    cache.serealize(Categories, TAG);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -135,7 +146,9 @@ public class CategoriesFragment extends Fragment implements FRequirement {
             }
         });
 
-        //categorieGridview.setAdapter(new categorieAdapter(this, Categories));
+        List<Categorie> categories = cache.getListCategory(TAG);
+        if (categories != null)
+            categorieGridview.setAdapter(new categorieAdapter(this, categories));
         setAppBarMenu();
         return view;
     }
