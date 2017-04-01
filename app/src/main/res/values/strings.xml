@@ -17,4 +17,7 @@
     <string name="btnKnowMore">En savoir plus</string>
 
     <string name="TitlePanier"><u>Panier</u></string>
+    <string name="Acheter">Acheter</string>
+
+    <string name="TitleCategorie">Categorie</string>
 </resources>

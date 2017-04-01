@@ -3,17 +3,20 @@ package com.example.oliviermedec.pducmaterial.Fragment.Product;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
+import com.example.oliviermedec.pducmaterial.Fragment.Panier.Panier;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.Product;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsAdapter;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsListFragment;
@@ -46,6 +49,7 @@ public class ProductFragment extends Fragment implements FRequirement {
     private static final String ID = "id";
     private static final String NAME = "name";
     private MainActivity _instance;
+    private Panier panier = null;
 
     // TODO: Rename and change types of parameters
     private String ProductId;
@@ -83,8 +87,10 @@ public class ProductFragment extends Fragment implements FRequirement {
         if (getArguments() != null) {
             ProductId = getArguments().getString(ID);
             ProductName = getArguments().getString(NAME);
+            getActivity().setTitle(ProductName);
         }
         cache = new Cache(getContext());
+        panier = new Panier(this.getContext());
     }
 
     @Override
@@ -97,6 +103,7 @@ public class ProductFragment extends Fragment implements FRequirement {
         final TextView descProduct = (TextView)view.findViewById(R.id.txtDescription);
         final TextView priceProduct = (TextView)view.findViewById(R.id.txtPrice);
         final TextView nameProduct = (TextView)view.findViewById(R.id.txtTitle);
+        final Button btnBuy = (Button)view.findViewById(R.id.btnBuy);
 
         Call<ProductResponse> call = productInterface.getProduct(ProductId);
 
@@ -104,21 +111,29 @@ public class ProductFragment extends Fragment implements FRequirement {
             @Override
             public void onResponse(Call<ProductResponse>call, Response<ProductResponse> response) {
                 if (response.body() != null) {
-                    Product product = response.body().getResult();
+                    final Product product = response.body().getResult();
                     descProduct.setText(product.description);
                     nameProduct.setText(product.nom);
                     priceProduct.setText(product.prix + "€");
                     Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
                             "/images/" + product.image).
                             into(imgProduct);
+
+                    btnBuy.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            panier.addProduct(product);
+                            Snackbar.make(getView(), product.nom + " est ajouté à votre panier.", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
                     try {
                         cache.serealize(product, ProductId);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    Log.d(TAG, "L'object body est null");
                 }
-                Log.d(TAG, "L'object body est null");
-
             }
 
             @Override
@@ -129,17 +144,18 @@ public class ProductFragment extends Fragment implements FRequirement {
         });
 
         try {
-            @SuppressWarnings("unchecked")
-            Product product = (Product)cache.deserialize(ProductId, Product.class);
-            if (product != null) {
-                descProduct.setText(product.description);
-                nameProduct.setText(product.nom);
-                priceProduct.setText(product.prix + "€");
-                Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
-                        "/images/" + product.image).
-                        into(imgProduct);
+            if (ProductId != null) {
+                @SuppressWarnings("unchecked")
+                Product product = (Product)cache.deserialize(ProductId, Product.class);
+                if (product != null) {
+                    descProduct.setText(product.description);
+                    nameProduct.setText(product.nom);
+                    priceProduct.setText(product.prix + "€");
+                    Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
+                            "/images/" + product.image).
+                            into(imgProduct);
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

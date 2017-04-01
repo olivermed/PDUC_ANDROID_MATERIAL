@@ -1,5 +1,6 @@
 package com.example.oliviermedec.pducmaterial.Fragment.Panier;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,8 +50,12 @@ public class PanierAdapter extends RecyclerView.Adapter<PanierAdapter.ViewHolder
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                panier.deleteProduct(products.get(position).id);
+                panier.deleteProduct(products.get(position)._id);
                 products = panier.getPanier();
+                notifyDataSetChanged();
+                if (products.size() == 0) {
+                    ((PanierFragment)parent).setPanierEmpty();
+                }
             }
         });
     }

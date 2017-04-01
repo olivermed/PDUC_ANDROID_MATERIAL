@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Product {
     @SerializedName("_id")
-    public String id;
+    public String _id;
     @SerializedName("nom")
     public String nom;
     @SerializedName("description")

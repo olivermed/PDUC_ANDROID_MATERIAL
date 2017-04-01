@@ -22,7 +22,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
@@ -35,9 +35,9 @@
                 tools:layout_editor_absoluteY="8dp">
 
                 <RelativeLayout
-                    android:layout_width="726dp"
-                    android:layout_height="668dp"
-                    android:padding="16dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="72dp">
 
                     <ImageView
                         android:id="@+id/ImageProduct"
@@ -45,7 +45,7 @@
                         android:layout_height="350dp"
                         android:layout_alignStart="@+id/txtTitle"
                         android:layout_below="@+id/txtTitle"
-                        android:layout_marginTop="17dp"
+                        android:layout_marginTop="32dp"
                         app:srcCompat="@drawable/side_nav_bar" />
 
                     <TextView
@@ -56,8 +56,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
-                        android:layout_marginStart="60dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginStart="0dp"
                         android:text="TextView"
                         android:textSize="36sp"
                         app:layout_constraintHorizontal_bias="1.0"
@@ -67,7 +66,7 @@
 
                     <TextView
                         android:id="@+id/txtDescription"
-                        android:layout_width="wrap_content"
+                        android:layout_width="500dp"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@+id/ImageProduct"
                         android:layout_below="@+id/ImageProduct"
@@ -78,23 +77,36 @@
                         android:id="@+id/txtPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignTop="@+id/ImageProduct"
-                        android:layout_marginEnd="83dp"
-                        android:text="TextView" />
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/textView"
+                        android:text="TextView"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/txtPrice"
+                        android:layout_toEndOf="@+id/txtDescription"
+                        android:text="Prix:"
+                        android:textSize="24sp" />
+
+                    <Button
+                        android:id="@+id/btnBuy"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/txtPrice"
+                        android:layout_alignStart="@+id/textView"
+                        android:layout_below="@+id/txtPrice"
+                        android:layout_marginTop="24dp"
+                        android:elevation="8dp"
+                        android:text="@string/Acheter"
+                        android:theme="@style/buyButton" />
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="208dp"
-                android:layout_marginTop="51dp"
-                android:text="Prix:"
-                android:layout_below="@+id/toolbar"
-                android:layout_alignEnd="@+id/cardView" />
 
         </RelativeLayout>
 </ScrollView>

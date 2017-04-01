@@ -99,6 +99,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_products_list, container, false);
+        getActivity().setTitle(objectName);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.listProducts);
 
         mRecyclerView.setHasFixedSize(true);
@@ -129,8 +130,9 @@ public class ProductsListFragment extends Fragment implements FRequirement {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    Log.d(TAG, "L'object body est null");
                 }
-                Log.d(TAG, "L'object body est null");
             }
 
             @Override
@@ -140,6 +142,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
             }
         });
 
+        System.out.println("ID to deserialize listProduct :: " + objectId);
         List<Product> products = cache.getListProduct(objectId);
         if (products != null){
             mAdapter = new ProductsAdapter(ProductsListFragment.this, products);
@@ -173,6 +176,12 @@ public class ProductsListFragment extends Fragment implements FRequirement {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public void setMainActivityInstance(MainActivity mainActivity) {
         _instance = mainActivity;
     }
@@ -200,7 +209,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
     public void callProduct(String id, String name){
         Fragment fragment = ProductFragment.newInstance(id, name);
         ((ProductFragment)fragment).setMainActivityInstance(_instance);
-        _instance.getSupportFragmentManager().beginTransaction()
+        getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)
                 .addToBackStack(SousCategorieFragment.TAG)
                 .commit();

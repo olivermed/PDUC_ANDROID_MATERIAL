@@ -110,7 +110,7 @@ public class CategoriesFragment extends Fragment implements FRequirement {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
-        ButterKnife.bind(this, view);
+        getActivity().setTitle(getString(R.string.TitleCategorie));
 
         categorieGridview = (GridView) view.findViewById(R.id.grid_category);
 
@@ -177,8 +177,8 @@ public class CategoriesFragment extends Fragment implements FRequirement {
         mListener = null;
     }
 
-    public void callSousCategorie(String id){
-        Fragment fragment = SousCategorieFragment.newInstance(id);
+    public void callSousCategorie(String id, String name){
+        Fragment fragment = SousCategorieFragment.newInstance(id, name);
         ((SousCategorieFragment)fragment).setMainActivityInstance(_instance);
         _instance.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)

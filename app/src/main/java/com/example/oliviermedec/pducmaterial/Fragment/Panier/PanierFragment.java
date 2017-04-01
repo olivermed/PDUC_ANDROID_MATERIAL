@@ -48,6 +48,7 @@ public class PanierFragment extends Fragment implements FRequirement {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -87,8 +88,8 @@ public class PanierFragment extends Fragment implements FRequirement {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_panier, container, false);
-        //panier.addProduct(new Product("test", "test", "54", "1489434783173-null_k1703104296915A_152234272.jpg"));
+        view = inflater.inflate(R.layout.fragment_panier, container, false);
+        getActivity().setTitle(getString(R.string.TitlePanier));
         List<Product> products = panier.getPanier();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.listProducts);
         ImageView img = (ImageView) view.findViewById(R.id.empty);
@@ -167,5 +168,13 @@ public class PanierFragment extends Fragment implements FRequirement {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void setPanierEmpty(){
+        if (view != null) {
+            ImageView img = (ImageView) view.findViewById(R.id.empty);
+            mRecyclerView.setVisibility(View.GONE);
+            img.setVisibility(View.VISIBLE);
+        }
     }
 }

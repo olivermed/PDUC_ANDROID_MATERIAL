@@ -1,55 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="680dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:elevation="8dp"
-    android:padding="0dp">
+    android:gravity="center_horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_vertical_margin">
+    <android.support.v7.widget.CardView
+        android:layout_width="680dp"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        android:padding="0dp">
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:text="TextView"
-            android:textSize="30sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_vertical_margin">
 
-        <ImageView
-            android:id="@+id/imgProduct"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="144dp"
-            app:srcCompat="@drawable/side_nav_bar" />
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginStart="23dp"
+                android:layout_toStartOf="@+id/imgProduct"
+                android:text="TextView"
+                android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/txtPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/imgProduct"
-            android:layout_alignRight="@+id/imgProduct"
-            android:layout_alignStart="@+id/imgProduct"
-            android:layout_below="@+id/imgProduct"
-            android:layout_marginStart="58dp"
-            android:layout_marginTop="42dp"
-            android:text="TextView" />
+            <ImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="144dp"
+                app:srcCompat="@drawable/side_nav_bar" />
 
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="26dp"
-            app:srcCompat="@drawable/ic_delete" />
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/imgProduct"
+                android:layout_alignRight="@+id/imgProduct"
+                android:layout_below="@+id/imgProduct"
+                android:layout_marginTop="42dp"
+                android:gravity="center"
+                android:text="TextView" />
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="26dp"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

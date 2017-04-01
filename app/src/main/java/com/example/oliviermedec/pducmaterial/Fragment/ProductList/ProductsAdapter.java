@@ -1,5 +1,6 @@
 package com.example.oliviermedec.pducmaterial.Fragment.ProductList;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.oliviermedec.pducmaterial.Cache.Cache;
+import com.example.oliviermedec.pducmaterial.Fragment.Panier.Panier;
 import com.example.oliviermedec.pducmaterial.R;
 import com.squareup.picasso.Picasso;
 
@@ -22,6 +25,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private List<Product> products;
     private Fragment parent;
+    private Panier panier = null;
 
     @Override
     public ProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -40,10 +44,17 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Picasso.with(parent.getContext()).load(parent.getContext().getResources().getString(R.string.server_url) +
                 "/images/" + products.get(i).image).
                 into(viewHolder.imgProduit);
-        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnKnowMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ProductsListFragment)parent).callProduct(products.get(i).id, products.get(i).nom);
+                ((ProductsListFragment)parent).callProduct(products.get(i)._id, products.get(i).nom);
+            }
+        });
+        viewHolder.btnBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                panier.addProduct(products.get(i));
+                Snackbar.make(parent.getView(), products.get(i).nom + " est ajouté à votre panier.", Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -56,6 +67,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     public ProductsAdapter(Fragment parent, List<Product> products){
         this.products = products;
         this.parent = parent;
+        this.panier = new Panier(parent.getContext());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,7 +76,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         public TextView txtDescrition;
         public TextView txtPrice;
         public ImageView imgProduit;
-        public Button button;
+        public Button btnKnowMore;
+        public Button btnBuy;
 
         public ViewHolder(View v) {
             super(v);
@@ -72,7 +85,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             txtDescrition = (TextView)v.findViewById(R.id.txtDescription);
             txtPrice = (TextView)v.findViewById(R.id.txtPrice);
             imgProduit = (ImageView)v.findViewById(R.id.imgProduct);
-            button = (Button)v.findViewById(R.id.btnOne);
+            btnKnowMore = (Button)v.findViewById(R.id.btnOne);
+            btnBuy = (Button)v.findViewById(R.id.btnBuy);
         }
     }
 }

@@ -45,10 +45,12 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String TAG = SousCategorieFragment.class.getSimpleName();
     private static final String SUBCATID = "subcatid";
+    private static final String SUBCATNAME = "subcatname";
     private MainActivity _instance = null;
 
     // TODO: Rename and change types of parameters
     private String subCatId;
+    private String subCatName;
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,10 +73,11 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
      * @return A new instance of fragment SousCategorieFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SousCategorieFragment newInstance(String id) {
+    public static SousCategorieFragment newInstance(String id, String name) {
         SousCategorieFragment fragment = new SousCategorieFragment();
         Bundle args = new Bundle();
         args.putString(SUBCATID, id);
+        args.putString(SUBCATNAME, name);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,6 +87,7 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             subCatId = getArguments().getString(SUBCATID);
+            subCatName = getArguments().getString(SUBCATNAME);
         }
         cache = new Cache(getContext());
     }
@@ -93,7 +97,7 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
-
+        getActivity().setTitle(subCatName);
         categorieGridview = (GridView) view.findViewById(R.id.grid_category);
 
         ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
@@ -156,7 +160,7 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
     public void callProductList(String id, String name){
         Fragment fragment = ProductsListFragment.newInstance(id, name);
         ((ProductsListFragment)fragment).setMainActivityInstance(_instance);
-        _instance.getSupportFragmentManager().beginTransaction()
+        getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)
                 .addToBackStack(SousCategorieFragment.TAG)
                 .commit();

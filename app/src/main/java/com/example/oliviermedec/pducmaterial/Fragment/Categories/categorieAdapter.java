@@ -38,8 +38,6 @@ public class categorieAdapter extends BaseAdapter {
         this.Categories = Categories;
     }
 
-
-
     @Override
     public int getCount() {
         return Categories.size();
@@ -102,7 +100,7 @@ public class categorieAdapter extends BaseAdapter {
                 public void onClick(View view) {
                     if (Categories.get(i).sousCategorie == null) { // Si c'est un categorie
                         ((CategoriesFragment)parent).setMainActivityInstance(((CategoriesFragment)parent)._instance);
-                        ((CategoriesFragment)parent).callSousCategorie(Categories.get(i)._id);
+                        ((CategoriesFragment)parent).callSousCategorie(Categories.get(i)._id, Categories.get(i).categorie);
                     } else { // Si c'est une sous categorie
                         ((SousCategorieFragment)parent).callProductList(Categories.get(i)._id, Categories.get(i).sousCategorie);
                     }

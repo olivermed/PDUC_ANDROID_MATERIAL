@@ -39,6 +39,7 @@ public class Cache {
     }
 
     public Object deserialize(String id, Class type) throws IOException {
+        System.out.println("id :: " + id);
         File file = new File(context.getFilesDir(), id);
         Object object = mapper.readValue(file, type);
         return object;
@@ -51,7 +52,6 @@ public class Cache {
         if (jsonCat == null) {
             return null;
         }
-        Log.w(Cache.class.toString(), jsonCat);
         return gson.fromJson(jsonCat, new TypeToken<List<Categorie>>(){}.getType());
     }
 
@@ -62,8 +62,12 @@ public class Cache {
         if (jsonCat == null) {
             return null;
         }
-        Log.w(Cache.class.toString(), jsonCat);
         return gson.fromJson(jsonCat, new TypeToken<List<Product>>(){}.getType());
+    }
+
+    public void delFile(String id) {
+        File file = new File(context.getFilesDir(), id);
+        file.delete();
     }
 
 

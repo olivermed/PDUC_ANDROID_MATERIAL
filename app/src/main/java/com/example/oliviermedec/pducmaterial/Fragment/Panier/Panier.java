@@ -21,8 +21,11 @@ public class Panier {
 
     public Panier(Context context) {
         this.context = context;
-        products = new ArrayList<>();
         cache = new Cache(this.context);
+        products = getPanier();
+        if (products == null) {
+            products = new ArrayList<>();
+        }
     }
 
     public void addProduct(Product product) {
@@ -45,7 +48,8 @@ public class Panier {
     private int getIndexToDeleteById(String id) {
         int i = 0;
         for (Product product: products) {
-            if (product.id == id) {
+            System.out.println(product._id + " == " +  id);
+            if (id.equals(product._id)) {
                 return i;
             }
             i++;
@@ -59,5 +63,9 @@ public class Panier {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void deletePanier(){
+        cache.delFile(TAG);
     }
 }
