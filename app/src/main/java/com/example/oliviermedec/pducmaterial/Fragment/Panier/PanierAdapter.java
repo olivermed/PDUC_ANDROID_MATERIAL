@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.Product;
 import com.example.oliviermedec.pducmaterial.R;
 import com.squareup.picasso.Picasso;
@@ -24,11 +25,13 @@ public class PanierAdapter extends RecyclerView.Adapter<PanierAdapter.ViewHolder
     public List<Product> products = null;
     private Fragment parent;
     private Panier panier;
+    private Cache cache;
 
     public PanierAdapter(Fragment parent, List<Product> products) {
         this.products = products;
         this.parent = parent;
         this.panier = new Panier(this.parent.getContext());
+        this.cache = new Cache(parent.getContext());
     }
 
     @Override
@@ -44,9 +47,7 @@ public class PanierAdapter extends RecyclerView.Adapter<PanierAdapter.ViewHolder
     public void onBindViewHolder(final PanierAdapter.ViewHolder holder, final int position) {
         holder.txtProductName.setText(products.get(position).nom);
         holder.txtPrice.setText(products.get(position).prix + "€");
-        /*Picasso.with(parent.getContext()).load(parent.getContext().getResources().getString(R.string.server_url) +
-                "/images/" + products.get(position).image).
-                into(holder.imgProduit);*/
+        cache.loadPicture(holder.imgProduit, products.get(position).image);
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

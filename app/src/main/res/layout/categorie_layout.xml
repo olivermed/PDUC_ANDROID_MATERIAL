@@ -20,8 +20,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/side_nav_bar" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/txtCategorie"

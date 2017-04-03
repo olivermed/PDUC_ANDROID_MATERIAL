@@ -7,15 +7,15 @@
     <!-- A CardView that contains a TextView -->
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
-        android:layout_gravity="center"
+        style="@style/MyCardViewStyle"
         android:layout_width="800dp"
         android:layout_height="200dp"
-        style="@style/MyCardViewStyle">
+        android:layout_gravity="center">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -26,27 +26,24 @@
                     android:id="@+id/txtProductName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="normal|bold"
+                    android:layout_marginBottom="5dp"
                     android:textSize="24sp"
-                    android:layout_marginBottom="5dp"/>
+                    android:textStyle="normal|bold" />
 
                 <ImageView
+                    android:id="@+id/imgProduct"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    app:srcCompat="@mipmap/ic_launcher"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/imgProduct"
-                    />
+                    android:layout_alignParentRight="true" />
 
                 <TextView
-                    android:text="ojrefoeirj oiejgo sfkpzoek fpzok fpzeokfp zeok fpzeokf pzeof pzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhfpzoekfpze k ljndk fjvndkjnk dfjnvd kjvndfk jnvdkjn dkjvndk jvnkd nkdfjnvk djnvkdjfnvk jndvk jnkjnfjkznmzif zjhf jzhef ze zef zfzijegoij eogij eoijgoei rjoei jeri jerogij eorjgi oerijg oeijrgoeijr ogeijr ojegoiejr oijergo jer joerij oe ijeorijg eoigrj erg erogij"
+                    android:id="@+id/txtDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtDescription"
-                    android:maxHeight="70dp"
-                    android:layout_below="@+id/txtProductName"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/imgProduct" />
+                    android:layout_below="@+id/txtProductName"
+                    android:layout_toStartOf="@+id/imgProduct"
+                    android:maxHeight="70dp" />
 
 
             </RelativeLayout>
@@ -57,22 +54,21 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:text="Price"
+                    android:id="@+id/txtPrice"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtPrice"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
                     android:gravity="center" />
 
                 <Button
                     android:id="@+id/btnOne"
-                    android:text="@string/btnKnowMore"
+                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:theme="@style/cardViewButton"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:text="@string/btnKnowMore"
+                    android:theme="@style/cardViewButton" />
 
                 <Button
                     android:id="@+id/btnBuy"

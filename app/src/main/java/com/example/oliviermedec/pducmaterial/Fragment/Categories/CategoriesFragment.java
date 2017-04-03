@@ -11,20 +11,17 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
-import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
 import com.example.oliviermedec.pducmaterial.Fragment.SousCategories.SousCategorieFragment;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +34,7 @@ import retrofit2.Response;
  * Use the {@link CategoriesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CategoriesFragment extends Fragment implements FRequirement {
+public class CategoriesFragment extends Fragment {
     public static final String TAG = CategoriesFragment.class.getSimpleName();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,13 +45,12 @@ public class CategoriesFragment extends Fragment implements FRequirement {
     private String mParam1;
     private String mParam2;
 
-    public MainActivity _instance;
-
     private OnFragmentInteractionListener mListener;
 
     private List<Categorie> Categories = new ArrayList<>();
 
     private Cache cache = null;
+    private List<Categorie> categoriesCache = null;
 
     @BindView(R.id.grid_category)
     GridView categorieGridview;
@@ -63,19 +59,8 @@ public class CategoriesFragment extends Fragment implements FRequirement {
         // Required empty public constructor
     }
 
-    @Override
-    public void setMainActivityInstance(MainActivity mainActivity) {
-        _instance = mainActivity;
-        setAppBarMenu();
-    }
-
-    @Override
-    public boolean setAppBarMenu() {
-        if (_instance != null){
-            _instance.setAppBarMenu(R.id.nav_category);
-            return true;
-        }
-        return false;
+    public void setAppBarMenu() {
+        ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_category);
     }
 
     /**
@@ -112,6 +97,8 @@ public class CategoriesFragment extends Fragment implements FRequirement {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         getActivity().setTitle(getString(R.string.TitleCategorie));
 
+        categoriesCache = cache.getListCategory(TAG);
+
         categorieGridview = (GridView) view.findViewById(R.id.grid_category);
 
         ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
@@ -125,17 +112,22 @@ public class CategoriesFragment extends Fragment implements FRequirement {
                 Log.w(TAG, "Categorie request request finished");
 
                 List<Categorie> categories = response.body().getResults();
-                Categories = new ArrayList<>();
-                for (Categorie categorie: categories) {
-                    Categories.add(categorie);
-                }
-                Log.d(TAG, "Number of categorie received: " + categories.size());
+                if (categoriesCache == null || categories.size() != categoriesCache.size()) {
+                    Categories = new ArrayList<>();
+                    for (Categorie categorie : categories) {
+                        Categories.add(categorie);
+                    }
+                    Log.d(TAG, "Number of categorie received: " + categories.size());
 
-                categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
-                try {
-                    cache.serealize(Categories, TAG);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
+                } else {
+                    System.out.println("No need to reset adapter for categories");
+
+                    try {
+                        cache.serealize(Categories, TAG);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -146,10 +138,8 @@ public class CategoriesFragment extends Fragment implements FRequirement {
             }
         });
 
-        List<Categorie> categories = cache.getListCategory(TAG);
-        if (categories != null)
-            categorieGridview.setAdapter(new categorieAdapter(this, categories));
-        setAppBarMenu();
+        if (categoriesCache != null)
+            categorieGridview.setAdapter(new categorieAdapter(this, categoriesCache));
         return view;
     }
 
@@ -179,11 +169,16 @@ public class CategoriesFragment extends Fragment implements FRequirement {
 
     public void callSousCategorie(String id, String name){
         Fragment fragment = SousCategorieFragment.newInstance(id, name);
-        ((SousCategorieFragment)fragment).setMainActivityInstance(_instance);
-        _instance.getSupportFragmentManager().beginTransaction()
+        getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)
                 .addToBackStack(SousCategorieFragment.TAG)
                 .commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setAppBarMenu();
     }
 
     /**

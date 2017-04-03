@@ -9,13 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
-import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.Categorie;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategorieResponse;
-import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.categorieAdapter;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsListFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
@@ -40,13 +37,12 @@ import retrofit2.Response;
  * Use the {@link SousCategorieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SousCategorieFragment extends Fragment implements FRequirement {
+public class SousCategorieFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String TAG = SousCategorieFragment.class.getSimpleName();
     private static final String SUBCATID = "subcatid";
     private static final String SUBCATNAME = "subcatname";
-    private MainActivity _instance = null;
 
     // TODO: Rename and change types of parameters
     private String subCatId;
@@ -159,7 +155,6 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
 
     public void callProductList(String id, String name){
         Fragment fragment = ProductsListFragment.newInstance(id, name);
-        ((ProductsListFragment)fragment).setMainActivityInstance(_instance);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)
                 .addToBackStack(SousCategorieFragment.TAG)
@@ -173,13 +168,13 @@ public class SousCategorieFragment extends Fragment implements FRequirement {
     }
 
     @Override
-    public void setMainActivityInstance(MainActivity mainActivity) {
-        _instance = mainActivity;
+    public void onResume() {
+        super.onResume();
+        setAppBarMenu();
     }
 
-    @Override
-    public boolean setAppBarMenu() {
-        return false;
+    public void setAppBarMenu() {
+        ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_category);
     }
 
     /**

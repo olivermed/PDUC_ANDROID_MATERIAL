@@ -1,5 +1,6 @@
 package com.example.oliviermedec.pducmaterial.Fragment.ProductList;
 
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +26,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private List<Product> products;
     private Fragment parent;
+    private Context context;
     private Panier panier = null;
+    private Cache cache = null;
 
     @Override
     public ProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -41,9 +44,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         viewHolder.txtProductName.setText(products.get(i).nom);
         viewHolder.txtDescrition.setText(products.get(i).description);
         viewHolder.txtPrice.setText(products.get(i).prix + "€");
-        Picasso.with(parent.getContext()).load(parent.getContext().getResources().getString(R.string.server_url) +
-                "/images/" + products.get(i).image).
-                into(viewHolder.imgProduit);
+        cache.loadPicture(viewHolder.imgProduit, products.get(i).image);
         viewHolder.btnKnowMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,10 +65,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         return products.size();
     }
 
-    public ProductsAdapter(Fragment parent, List<Product> products){
+    public ProductsAdapter(Fragment parent, List<Product> products, Context context){
         this.products = products;
         this.parent = parent;
-        this.panier = new Panier(parent.getContext());
+        this.context = context;
+        this.panier = new Panier(this.context);
+        this.cache = new Cache(this.context);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -22,6 +22,7 @@ import com.example.oliviermedec.pducmaterial.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,10 +33,13 @@ import java.util.List;
 public class categorieAdapter extends BaseAdapter {
     private Fragment parent;
     private List<Categorie> Categories;
+    private Cache cache;
+    private View categorieView;
 
     public categorieAdapter(Fragment parent, List<Categorie> Categories) {
         this.parent = parent;
         this.Categories = Categories;
+        cache = new Cache(parent.getContext());
     }
 
     @Override
@@ -58,35 +62,13 @@ public class categorieAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) parent.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View categorieView = inflater.inflate(R.layout.categorie_layout, null);
+        categorieView = inflater.inflate(R.layout.categorie_layout, null);
 
         TextView catagorieTxt = (TextView)categorieView.findViewById(R.id.txtCategorie);
 
         final ImageView imageView = (ImageView)categorieView.findViewById(R.id.imageViewCategorie);
 
-        Picasso.with(parent.getContext()).load(parent.getContext().getResources().getString(R.string.server_url) +
-                "/images/" + Categories.get(i).image).
-                into(imageView);
-
-        /*final Cache cache = new Cache(parent.getContext());
-        Bitmap img = cache.getPicture(Categories.get(i).image);
-        if (img != null) {
-            imageView.setImageBitmap(img);
-        } else {
-            Picasso.with(parent.getContext()).load(parent.getContext().getResources().getString(R.string.server_url) +
-                    "/images/" + Categories.get(i).image).into(imageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                    cache.storePicture(bitmap, Categories.get(i).image);
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            });
-        }*/
+        cache.loadPicture(imageView, Categories.get(i).image);
 
         if (Categories.get(i).sousCategorie == null) { // Si c'est un categorie
             catagorieTxt.setText(Categories.get(i).categorie.toUpperCase());
@@ -99,7 +81,6 @@ public class categorieAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     if (Categories.get(i).sousCategorie == null) { // Si c'est un categorie
-                        ((CategoriesFragment)parent).setMainActivityInstance(((CategoriesFragment)parent)._instance);
                         ((CategoriesFragment)parent).callSousCategorie(Categories.get(i)._id, Categories.get(i).categorie);
                     } else { // Si c'est une sous categorie
                         ((SousCategorieFragment)parent).callProductList(Categories.get(i)._id, Categories.get(i).sousCategorie);

@@ -35,7 +35,6 @@ public class Panier {
 
     public void deleteProduct(String id) {
         int index = getIndexToDeleteById(id);
-        System.out.println("index :: " + index);
         products.remove(index);
         savePanier();
     }
@@ -48,7 +47,6 @@ public class Panier {
     private int getIndexToDeleteById(String id) {
         int i = 0;
         for (Product product: products) {
-            System.out.println(product._id + " == " +  id);
             if (id.equals(product._id)) {
                 return i;
             }

@@ -45,8 +45,7 @@
                         android:layout_height="350dp"
                         android:layout_alignStart="@+id/txtTitle"
                         android:layout_below="@+id/txtTitle"
-                        android:layout_marginTop="32dp"
-                        app:srcCompat="@drawable/side_nav_bar" />
+                        android:layout_marginTop="32dp" />
 
                     <TextView
                         android:id="@+id/txtTitle"

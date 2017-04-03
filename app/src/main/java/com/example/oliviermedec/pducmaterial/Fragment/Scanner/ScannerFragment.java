@@ -3,15 +3,11 @@ package com.example.oliviermedec.pducmaterial.Fragment.Scanner;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
 
@@ -25,7 +21,7 @@ import butterknife.ButterKnife;
  * Use the {@link ScannerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScannerFragment extends Fragment implements FRequirement {
+public class ScannerFragment extends Fragment {
     public static final String TAG = ScannerFragment.class.getSimpleName();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,8 +33,6 @@ public class ScannerFragment extends Fragment implements FRequirement {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
-    public MainActivity _instance;
 
     public ScannerFragment() {
         // Required empty public constructor
@@ -111,18 +105,8 @@ public class ScannerFragment extends Fragment implements FRequirement {
         setAppBarMenu();
     }
 
-    @Override
-    public void setMainActivityInstance(MainActivity mainActivity) {
-        _instance = mainActivity;
-        setAppBarMenu();
-    }
-
-    public boolean setAppBarMenu() {
-        if (_instance != null){
-            _instance.setAppBarMenu(R.id.nav_scanner);
-            return true;
-        }
-        return false;
+    public void setAppBarMenu() {
+        ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_scanner);
     }
 
     /**

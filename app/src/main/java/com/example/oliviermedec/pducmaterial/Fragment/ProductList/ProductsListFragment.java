@@ -1,24 +1,17 @@
 package com.example.oliviermedec.pducmaterial.Fragment.ProductList;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
-import com.example.oliviermedec.pducmaterial.FRequirement;
-import com.example.oliviermedec.pducmaterial.Fragment.Categories.Categorie;
-import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
-import com.example.oliviermedec.pducmaterial.Fragment.Categories.categorieAdapter;
 import com.example.oliviermedec.pducmaterial.Fragment.Product.ProductFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
@@ -42,7 +35,7 @@ import retrofit2.Response;
  * Use the {@link ProductsListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductsListFragment extends Fragment implements FRequirement {
+public class ProductsListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "id";
@@ -53,7 +46,6 @@ public class ProductsListFragment extends Fragment implements FRequirement {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Product> Products = new ArrayList<>();
-    private MainActivity _instance;
     private Cache cache = null;
 
     // TODO: Rename and change types of parameters
@@ -123,7 +115,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
                     }
                     Log.d(TAG, "Number of products received: " + products.size());
 
-                    mAdapter = new ProductsAdapter(ProductsListFragment.this, Products);
+                    mAdapter = new ProductsAdapter(ProductsListFragment.this, Products, getContext());
                     mRecyclerView.setAdapter(mAdapter);
                     try {
                         cache.serealize(Products, objectId);
@@ -145,7 +137,7 @@ public class ProductsListFragment extends Fragment implements FRequirement {
         System.out.println("ID to deserialize listProduct :: " + objectId);
         List<Product> products = cache.getListProduct(objectId);
         if (products != null){
-            mAdapter = new ProductsAdapter(ProductsListFragment.this, products);
+            mAdapter = new ProductsAdapter(ProductsListFragment.this, products, getContext());
             mRecyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -178,17 +170,11 @@ public class ProductsListFragment extends Fragment implements FRequirement {
     @Override
     public void onResume() {
         super.onResume();
-
+        setAppBarMenu();
     }
 
-    @Override
-    public void setMainActivityInstance(MainActivity mainActivity) {
-        _instance = mainActivity;
-    }
-
-    @Override
-    public boolean setAppBarMenu() {
-        return false;
+    public void setAppBarMenu() {
+        ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_category);
     }
 
     /**
@@ -208,7 +194,6 @@ public class ProductsListFragment extends Fragment implements FRequirement {
 
     public void callProduct(String id, String name){
         Fragment fragment = ProductFragment.newInstance(id, name);
-        ((ProductFragment)fragment).setMainActivityInstance(_instance);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, SousCategorieFragment.TAG)
                 .addToBackStack(SousCategorieFragment.TAG)

@@ -14,13 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
-import com.example.oliviermedec.pducmaterial.FRequirement;
-import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.Panier;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.Product;
-import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsAdapter;
-import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsListFragment;
-import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsResponse;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.ApiInterface;
 import com.example.oliviermedec.pducmaterial.Fragment.Request.PducAPI;
 import com.example.oliviermedec.pducmaterial.MainActivity;
@@ -28,7 +23,6 @@ import com.example.oliviermedec.pducmaterial.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,7 +36,7 @@ import retrofit2.Response;
  * Use the {@link ProductFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductFragment extends Fragment implements FRequirement {
+public class ProductFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = ProductFragment.class.getSimpleName();
@@ -115,9 +109,10 @@ public class ProductFragment extends Fragment implements FRequirement {
                     descProduct.setText(product.description);
                     nameProduct.setText(product.nom);
                     priceProduct.setText(product.prix + "€");
-                    Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
+                    /*Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
                             "/images/" + product.image).
-                            into(imgProduct);
+                            into(imgProduct);*/
+                    cache.loadPicture(imgProduct, product.image);
 
                     btnBuy.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -172,6 +167,7 @@ public class ProductFragment extends Fragment implements FRequirement {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        setAppBarMenu();
         /*if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -187,13 +183,12 @@ public class ProductFragment extends Fragment implements FRequirement {
     }
 
     @Override
-    public void setMainActivityInstance(MainActivity mainActivity) {
-        _instance = mainActivity;
+    public void onResume() {
+        super.onResume();
     }
 
-    @Override
-    public boolean setAppBarMenu() {
-        return false;
+    public void setAppBarMenu() {
+        ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_category);
     }
 
     /**

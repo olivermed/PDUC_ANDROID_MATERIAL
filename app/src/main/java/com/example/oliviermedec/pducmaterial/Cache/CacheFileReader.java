@@ -29,9 +29,7 @@ public class CacheFileReader {
             String str = "";
             while ((str = br.readLine()) != null) {
                 sCurrentLine = str;
-                System.out.println(sCurrentLine);
             }
-            System.out.println("Return :" + sCurrentLine);
         } catch (IOException e) {
 
             e.printStackTrace();

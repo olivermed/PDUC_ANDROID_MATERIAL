@@ -1,11 +1,9 @@
 package com.example.oliviermedec.pducmaterial.Fragment.Panier;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.oliviermedec.pducmaterial.FRequirement;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.Product;
-import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductsAdapter;
 import com.example.oliviermedec.pducmaterial.MainActivity;
 import com.example.oliviermedec.pducmaterial.R;
 
@@ -31,13 +27,12 @@ import java.util.List;
  * Use the {@link PanierFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PanierFragment extends Fragment implements FRequirement {
+public class PanierFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String TAG = PanierFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public MainActivity _instance;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -124,6 +119,12 @@ public class PanierFragment extends Fragment implements FRequirement {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        setAppBarMenu();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         /*if (context instanceof OnFragmentInteractionListener) {
@@ -141,18 +142,14 @@ public class PanierFragment extends Fragment implements FRequirement {
     }
 
     @Override
-    public void setMainActivityInstance(MainActivity mainActivity) {
-        _instance = mainActivity;
-        setAppBarMenu();
+    public void onStop() {
+        super.onStop();
+        ((MainActivity)getActivity()).fab.setImageResource(R.drawable.ic_camera_alt);
     }
 
-    @Override
-    public boolean setAppBarMenu() {
-        if (_instance != null){
-            _instance.setAppBarMenu(R.id.nav_pannier);
-            return true;
-        }
-        return false;
+    public void setAppBarMenu() {
+        ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_pannier);
+        ((MainActivity)getActivity()).fab.setImageResource(R.drawable.ic_shopping_cart_white);
     }
 
     /**

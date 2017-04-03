@@ -19,10 +19,12 @@ import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragm
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.PanierFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Scanner.ScannerFragment;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public NavigationView navigationView = null;
+    public FloatingActionButton fab = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,15 +96,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_category) {
             CategoriesFragment categoriesFragment = new CategoriesFragment();
-            categoriesFragment.setMainActivityInstance(this);
             setFragment(categoriesFragment, categoriesFragment.TAG);
         } else if (id == R.id.nav_scanner) {
             ScannerFragment scannerFragment = new ScannerFragment();
-            scannerFragment.setMainActivityInstance(this);
             setFragment(scannerFragment, scannerFragment.TAG);
         } else if (id == R.id.nav_pannier) {
             PanierFragment panierFragment = new PanierFragment();
-            panierFragment.setMainActivityInstance(this);
             setFragment(panierFragment, panierFragment.TAG);
         }
 
@@ -133,16 +132,6 @@ public class MainActivity extends AppCompatActivity
         Log.w("Number of entry::", "" + entry);
     }
 
-    private void initFragmentParentInstance(Fragment fragment, String Tag){
-        if (Tag == ScannerFragment.TAG) {
-            System.out.println("Parent instance 1");
-            ((ScannerFragment)fragment).setMainActivityInstance(this);
-        } else if (Tag == CategoriesFragment.TAG) {
-            System.out.println("Parent instance 2");
-            ((CategoriesFragment)fragment).setMainActivityInstance(this);
-        }
-    }
-
     public void setAppBarMenu(int id) {
         navigationView.setCheckedItem(id);
     }
@@ -151,13 +140,7 @@ public class MainActivity extends AppCompatActivity
         if (findViewById(R.id.fragment_container) != null &&
                 getSupportFragmentManager().getBackStackEntryCount() == 0) {
             CategoriesFragment categoriesFragment = new CategoriesFragment();
-            categoriesFragment.setMainActivityInstance(this);
             setFragment(categoriesFragment, categoriesFragment.TAG);
-        }
-        int entry = getSupportFragmentManager().getBackStackEntryCount();
-        if (entry > 0) {
-            Fragment currentFrag = getSupportFragmentManager().getFragments().get(entry - 1);
-            initFragmentParentInstance(currentFrag, currentFrag.getTag());
         }
     }
 }
