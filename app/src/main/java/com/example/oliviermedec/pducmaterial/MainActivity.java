@@ -1,9 +1,12 @@
 package com.example.oliviermedec.pducmaterial;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,16 +18,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragment;
+import com.example.oliviermedec.pducmaterial.Fragment.Panier.Panier;
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.PanierFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Scanner.ScannerFragment;
-
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public NavigationView navigationView = null;
     public FloatingActionButton fab = null;
+    private View.OnClickListener panierBuy = null;
+
+    private View.OnClickListener Scanner = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Snackbar.make(view, "Ceci est le boutton pour scanner.", Snackbar.LENGTH_LONG).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +46,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(Scanner);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -142,5 +148,75 @@ public class MainActivity extends AppCompatActivity
             CategoriesFragment categoriesFragment = new CategoriesFragment();
             setFragment(categoriesFragment, categoriesFragment.TAG);
         }
+    }
+
+    public void setPanierFabListener(){
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (new Panier(getApplicationContext()).getPanier() != null) {
+                    DialogPanier();
+                } else {
+                    Snackbar.make(view, getResources().getString(R.string.no_products), Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void setScannerFabListener() {
+        fab.setOnClickListener(Scanner);
+    }
+
+    public void DialogPanier() {
+        new MaterialDialog.Builder(MainActivity.this)
+                .titleColorRes(R.color.colorPrimary)
+                .contentColor(Color.WHITE) // notice no 'res' postfix for literal color
+                .backgroundColorRes(R.color.blueGrey)
+                .positiveColorRes(R.color.white)
+                .neutralColorRes(R.color.white)
+                .negativeColorRes(R.color.white)
+                .widgetColorRes(R.color.colorPrimary)
+                .buttonRippleColorRes(R.color.colorPrimary)
+                .inputRangeRes(4, 80, R.color.colorPrimary)
+                .title(R.string.panier)
+                .content("Total : " + new Panier(getApplicationContext()).getTotalFacture() + "\n\n" + getResources().getString(R.string.insert_name_ask))
+                .positiveText(R.string.allow)
+                .negativeText(R.string.cancel)
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(R.string.input_name_hint, R.string.input_name_prefill, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        System.out.println(input);
+                        final MaterialDialog EndAchat = new  MaterialDialog.Builder(MainActivity.this)
+                                .titleColorRes(R.color.colorPrimary)
+                                .contentColor(Color.WHITE) // notice no 'res' postfix for literal color
+                                .backgroundColorRes(R.color.blueGrey)
+                                .positiveColorRes(R.color.white)
+                                .neutralColorRes(R.color.white)
+                                .negativeColorRes(R.color.white)
+                                .widgetColorRes(R.color.colorPrimary)
+                                .buttonRippleColorRes(R.color.colorPrimary)
+                                .title(R.string.panier)
+                                .cancelable(false)
+                                .content("Mr/Mlle " + input + " " + getResources().getString(R.string.get_your_stuff))
+                                .show();
+
+                        final Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (EndAchat.isShowing()) {
+                                    EndAchat.dismiss();
+                                    new Panier(getApplicationContext()).deletePanier();
+                                    finish();
+                                }
+                            }
+                        };
+                        final Handler handler = new Handler();
+                        dialog.dismiss();
+                        handler.postDelayed(runnable, 10000);
+                    }
+                })
+                .show();
     }
 }

@@ -4,6 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.example.oliviermedec.pducmaterial"
         minSdkVersion 17
         targetSdkVersion 25
@@ -54,6 +55,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
     compile 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
     compile 'com.google.zxing:core:3.3.0'
-    compile 'com.github.wangjiegulu:RapidFloatingActionButton:1.0.3'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.2'
+    compile 'com.afollestad.material-dialogs:commons:0.9.4.2'
     testCompile 'junit:junit:4.12'
 }

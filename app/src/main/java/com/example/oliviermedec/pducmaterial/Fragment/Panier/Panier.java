@@ -63,7 +63,20 @@ public class Panier {
         }
     }
 
-    private void deletePanier(){
+    public String getTotalFacture() {
+        List<Product> products = getPanier();
+        if (products.size() == 0) {
+            return null;
+        }
+        double total = 0.0d;
+
+        for (Product product : products) {
+            total += Double.parseDouble(product.prix);
+        }
+        return String.valueOf(total);
+    }
+
+    public void deletePanier(){
         cache.delFile(TAG);
     }
 }

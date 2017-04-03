@@ -20,4 +20,17 @@
     <string name="Acheter">Acheter</string>
 
     <string name="TitleCategorie">Categorie</string>
+    <string name="panier">Panier</string>
+    <string name="agree">Oui</string>
+    <string name="disagree">Non</string>
+    <string name="cancel">Cancel</string>
+    <string name="allow">Ok</string>
+    <string name="insert_name_ask">Pour effectuer cette achat, veuillez insérer votre nom et prénom:</string>
+    <string name="input_name_hint">Nom et Prénom</string>
+    <string name="input_name_prefill"></string>
+
+    <string name="title_activity_welcom">WelcomActivity</string>
+    <string name="welcome">Bienvenue chez Darty.</string>
+    <string name="no_products">Vous n\'avez sélectionné aucun produit.</string>
+    <string name="get_your_stuff">vos produits sont en cours de préparation veuillez vous rendre au caisse de retrait.</string>
 </resources>

@@ -145,11 +145,13 @@ public class PanierFragment extends Fragment {
     public void onStop() {
         super.onStop();
         ((MainActivity)getActivity()).fab.setImageResource(R.drawable.ic_camera_alt);
+        ((MainActivity)getActivity()).setScannerFabListener();
     }
 
     public void setAppBarMenu() {
         ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_pannier);
-        ((MainActivity)getActivity()).fab.setImageResource(R.drawable.ic_shopping_cart_white);
+        ((MainActivity)getActivity()).fab.setImageResource(R.drawable.ic_shopping_cart);
+        ((MainActivity)getActivity()).setPanierFabListener();
     }
 
     /**

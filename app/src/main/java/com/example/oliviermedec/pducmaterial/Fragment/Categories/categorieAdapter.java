@@ -1,13 +1,7 @@
 package com.example.oliviermedec.pducmaterial.Fragment.Categories;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
-import com.example.oliviermedec.pducmaterial.Fragment.ProductList.ProductListActivity;
 import com.example.oliviermedec.pducmaterial.Fragment.SousCategories.SousCategorieFragment;
 import com.example.oliviermedec.pducmaterial.R;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**

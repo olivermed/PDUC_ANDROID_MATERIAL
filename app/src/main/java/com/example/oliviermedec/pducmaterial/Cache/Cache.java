@@ -126,9 +126,7 @@ public class Cache {
                     }
 
                     @Override
-                    public void onError() {
-
-                    }
+                    public void onError() {}
                 });
             }
         }
