@@ -115,7 +115,7 @@ public class ProductsListFragment extends Fragment {
                     }
                     Log.d(TAG, "Number of products received: " + products.size());
 
-                    mAdapter = new ProductsAdapter(ProductsListFragment.this, Products, getContext());
+                    mAdapter = new ProductsAdapter(ProductsListFragment.this, Products, getActivity().getApplicationContext());
                     mRecyclerView.setAdapter(mAdapter);
                     try {
                         cache.serealize(Products, objectId);

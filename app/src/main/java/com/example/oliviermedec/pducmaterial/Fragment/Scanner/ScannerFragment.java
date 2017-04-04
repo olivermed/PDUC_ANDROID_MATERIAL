@@ -1,17 +1,22 @@
 package com.example.oliviermedec.pducmaterial.Fragment.Scanner;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
+
+import com.example.oliviermedec.pducmaterial.Fragment.Product.ProductFragment;
 import com.example.oliviermedec.pducmaterial.MainActivity;
+import com.example.oliviermedec.pducmaterial.PointsOverlayView;
 import com.example.oliviermedec.pducmaterial.R;
-
-import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,12 +26,16 @@ import butterknife.ButterKnife;
  * Use the {@link ScannerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScannerFragment extends Fragment {
+public class ScannerFragment extends Fragment implements QRCodeReaderView.OnQRCodeReadListener {
     public static final String TAG = ScannerFragment.class.getSimpleName();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private TextView resultTextView;
+    private QRCodeReaderView qrCodeReaderView;
+    private PointsOverlayView pointsOverlayView;
+    FloatingActionButton fab = null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,8 +79,28 @@ public class ScannerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scanner, container, false);
-        ButterKnife.bind(this, view);
+        //new IntentIntegrator(getActivity()).initiateScan();
         setAppBarMenu();
+        qrCodeReaderView = (QRCodeReaderView) view.findViewById(R.id.qrdecoderview);
+        pointsOverlayView = (PointsOverlayView) view.findViewById(R.id.points_overlay_view);
+        //resultTextView = (TextView)view.findViewById(R.id.resultTextView);
+        qrCodeReaderView.setOnQRCodeReadListener(this);
+
+        // Use this function to enable/disable decoding
+        qrCodeReaderView.setQRDecodingEnabled(true);
+
+        // Use this function to change the autofocus interval (default is 5 secs)
+        qrCodeReaderView.setAutofocusInterval(2000L);
+
+        // Use this function to enable/disable Torch
+        qrCodeReaderView.setTorchEnabled(false);
+
+        // Use this function to set front camera preview
+        //qrCodeReaderView.setFrontCamera();
+
+        // Use this function to set back camera preview
+        qrCodeReaderView.setBackCamera();
+
         return view;
     }
 
@@ -103,10 +132,33 @@ public class ScannerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setAppBarMenu();
+        qrCodeReaderView.startCamera();
+        qrCodeReaderView.setQRDecodingEnabled(true);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        fab.setVisibility(View.VISIBLE);
+        qrCodeReaderView.stopCamera();
     }
 
     public void setAppBarMenu() {
         ((MainActivity)getActivity()).setAppBarMenu(R.id.nav_scanner);
+        getActivity().setTitle(getString(R.string.TitleScanner));
+        fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onQRCodeRead(String text, PointF[] points) {
+        pointsOverlayView.setPoints(points);
+        System.out.println(text);
+        ProductFragment productFragment = ProductFragment.newInstance(text, getResources().getString(R.string.TitleScanner));
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, productFragment, productFragment.getTag())
+                .addToBackStack(productFragment.getTag())
+                .commit();
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.example.oliviermedec.pducmaterial;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,20 +24,14 @@ import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragm
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.Panier;
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.PanierFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Scanner.ScannerFragment;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public NavigationView navigationView = null;
     public FloatingActionButton fab = null;
-    private View.OnClickListener panierBuy = null;
-
-    private View.OnClickListener Scanner = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Snackbar.make(view, "Ceci est le boutton pour scanner.", Snackbar.LENGTH_LONG).show();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +162,14 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(Scanner);
     }
 
+    private View.OnClickListener Scanner = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //Snackbar.make(view, "Ceci est le boutton pour scanner.", Snackbar.LENGTH_LONG).show();
+            setFragment(ScannerFragment.newInstance(null, null), ScannerFragment.TAG);
+        }
+    };
+
     public void DialogPanier() {
         new MaterialDialog.Builder(MainActivity.this)
                 .titleColorRes(R.color.colorPrimary)
@@ -218,5 +221,19 @@ public class MainActivity extends AppCompatActivity
                     }
                 })
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanningResult != null) {
+            String scanContent = scanningResult.getContents();
+
+            String scanFormat = scanningResult.getFormatName();
+
+            System.out.println(scanContent + " :: " + scanFormat);
+        }
     }
 }
