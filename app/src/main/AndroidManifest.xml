@@ -22,7 +22,7 @@
             android:name=".WelcomActivity"
             android:screenOrientation="sensorLandscape"
             android:label="@string/title_activity_welcom"
-            android:theme="@style/FullscreenTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

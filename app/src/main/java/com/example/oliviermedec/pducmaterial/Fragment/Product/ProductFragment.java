@@ -141,7 +141,7 @@ public class ProductFragment extends Fragment {
         try {
             if (ProductId != null) {
                 @SuppressWarnings("unchecked")
-                Product product = (Product)cache.deserialize(ProductId, Product.class);
+                Product product = (Product)cache.getProduct(ProductId);
                 if (product != null) {
                     descProduct.setText(product.description);
                     nameProduct.setText(product.nom);
@@ -149,6 +149,7 @@ public class ProductFragment extends Fragment {
                     Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
                             "/images/" + product.image).
                             into(imgProduct);
+                    cache.loadPicture(imgProduct, product.image);
                 }
             }
         } catch (IOException e) {

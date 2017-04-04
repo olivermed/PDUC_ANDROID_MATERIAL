@@ -6,6 +6,8 @@ import com.example.oliviermedec.pducmaterial.Cache.Cache;
 import com.example.oliviermedec.pducmaterial.Fragment.ProductList.Product;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,12 +70,15 @@ public class Panier {
         if (products.size() == 0) {
             return null;
         }
-        double total = 0.0d;
+        Double total = 0.0d;
 
         for (Product product : products) {
             total += Double.parseDouble(product.prix);
         }
-        return String.valueOf(total);
+
+        return String.valueOf(BigDecimal.valueOf(total)
+                .setScale(3, RoundingMode.HALF_UP)
+                .doubleValue());
     }
 
     public void deletePanier(){

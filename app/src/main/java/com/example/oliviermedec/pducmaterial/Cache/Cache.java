@@ -49,6 +49,18 @@ public class Cache {
         return object;
     }
 
+    public Product getProduct(String id) throws IOException {
+        CacheFileReader cacheFileReader = new CacheFileReader();
+        String jsonCat = cacheFileReader.read(context.getFilesDir() + "/" + id);
+
+        if (jsonCat == null) {
+            return null;
+        }
+        System.out.println("getProduct json return :: " + jsonCat);
+
+        return gson.fromJson(jsonCat, Product.class);
+    }
+
     public List<Categorie> getListCategory(String id){
         CacheFileReader cacheFileReader = new CacheFileReader();
         String jsonCat = cacheFileReader.read(context.getFilesDir() + "/" + id);
@@ -56,6 +68,8 @@ public class Cache {
         if (jsonCat == null) {
             return null;
         }
+        System.out.println("getListCategory json return :: " + jsonCat);
+
         return gson.fromJson(jsonCat, new TypeToken<List<Categorie>>(){}.getType());
     }
 
@@ -66,6 +80,7 @@ public class Cache {
         if (jsonCat == null) {
             return null;
         }
+        System.out.println("GetListProduct json return :: " + jsonCat);
         return gson.fromJson(jsonCat, new TypeToken<List<Product>>(){}.getType());
     }
 

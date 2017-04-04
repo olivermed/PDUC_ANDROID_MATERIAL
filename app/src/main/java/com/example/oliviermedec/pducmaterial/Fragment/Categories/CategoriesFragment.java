@@ -118,16 +118,14 @@ public class CategoriesFragment extends Fragment {
                         Categories.add(categorie);
                     }
                     Log.d(TAG, "Number of categorie received: " + categories.size());
-
-                    categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
-                } else {
-                    System.out.println("No need to reset adapter for categories");
-
                     try {
                         cache.serealize(Categories, TAG);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
+                } else {
+                    System.out.println("No need to reset adapter for categories");
                 }
             }
 
@@ -138,8 +136,12 @@ public class CategoriesFragment extends Fragment {
             }
         });
 
-        if (categoriesCache != null)
+        if (categoriesCache != null){
+            System.out.println("Catégorie cache :: " + categoriesCache.size());
             categorieGridview.setAdapter(new categorieAdapter(this, categoriesCache));
+        } else {
+            System.out.println("Catégorie cache :: null");
+        }
         return view;
     }
 
