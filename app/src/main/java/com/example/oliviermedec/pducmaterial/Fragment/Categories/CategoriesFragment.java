@@ -101,18 +101,18 @@ public class CategoriesFragment extends Fragment {
 
         categorieGridview = (GridView) view.findViewById(R.id.grid_category);
 
-        ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
+        if (getActivity() != null) {
+            ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
 
-        Log.w(TAG, "Categorie request started");
-        Call<CategorieResponse> call = productInterface.getCategories();
+            Log.w(TAG, "Categorie request started");
+            Call<CategorieResponse> call = productInterface.getCategories();
 
-        call.enqueue(new Callback<CategorieResponse>() {
-            @Override
-            public void onResponse(Call<CategorieResponse>call, Response<CategorieResponse> response) {
-                Log.w(TAG, "Categorie request request finished");
+            call.enqueue(new Callback<CategorieResponse>() {
+                @Override
+                public void onResponse(Call<CategorieResponse> call, Response<CategorieResponse> response) {
+                    Log.w(TAG, "Categorie request request finished");
 
-                List<Categorie> categories = response.body().getResults();
-                if (categoriesCache == null || categories.size() != categoriesCache.size()) {
+                    List<Categorie> categories = response.body().getResults();
                     Categories = new ArrayList<>();
                     for (Categorie categorie : categories) {
                         Categories.add(categorie);
@@ -123,18 +123,21 @@ public class CategoriesFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
-                } else {
-                    System.out.println("No need to reset adapter for categories");
-                }
-            }
 
-            @Override
-            public void onFailure(Call<CategorieResponse>call, Throwable t) {
-                // Log error here since request failed
-                Log.e(TAG, t.toString());
-            }
-        });
+                    if (categoriesCache == null || categories.size() != categoriesCache.size()) {
+                        categorieGridview.setAdapter(new categorieAdapter(CategoriesFragment.this, Categories));
+                    } else {
+                        System.out.println("No need to reset adapter for categories");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CategorieResponse> call, Throwable t) {
+                    // Log error here since request failed
+                    Log.e(TAG, t.toString());
+                }
+            });
+        }
 
         if (categoriesCache != null){
             System.out.println("Catégorie cache :: " + categoriesCache.size());

@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.oliviermedec.pducmaterial.Cache.Cache;
@@ -42,7 +44,6 @@ public class ProductFragment extends Fragment {
     private static final String TAG = ProductFragment.class.getSimpleName();
     private static final String ID = "id";
     private static final String NAME = "name";
-    private MainActivity _instance;
     private Panier panier = null;
 
     // TODO: Rename and change types of parameters
@@ -93,8 +94,11 @@ public class ProductFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
+
+        final RelativeLayout loadingLayout = (RelativeLayout)view.findViewById(R.id.loadingLayout);
+        final RelativeLayout productLayout = (RelativeLayout)view.findViewById(R.id.productLayout);
         final ImageView imgProduct = (ImageView)view.findViewById(R.id.ImageProduct);
-        final TextView descProduct = (TextView)view.findViewById(R.id.txtDescription);
+        final WebView descProduct = (WebView) view.findViewById(R.id.txtDescription);
         final TextView priceProduct = (TextView)view.findViewById(R.id.txtPrice);
         final TextView nameProduct = (TextView)view.findViewById(R.id.txtTitle);
         final Button btnBuy = (Button)view.findViewById(R.id.btnBuy);
@@ -103,15 +107,14 @@ public class ProductFragment extends Fragment {
 
         call.enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(Call<ProductResponse>call, Response<ProductResponse> response) {
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.body() != null) {
+                    loadingLayout.setVisibility(View.GONE);
+                    productLayout.setVisibility(View.VISIBLE);
                     final Product product = response.body().getResult();
-                    descProduct.setText(product.description);
-                    nameProduct.setText(product.nom);
+                    descProduct.loadData(product.description, "text/html; charset=UTF-8", null);
+                    nameProduct.setText(product.nom.toUpperCase());
                     priceProduct.setText(product.prix + "€");
-                    /*Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
-                            "/images/" + product.image).
-                            into(imgProduct);*/
                     cache.loadPicture(imgProduct, product.image);
 
                     btnBuy.setOnClickListener(new View.OnClickListener() {
@@ -132,19 +135,22 @@ public class ProductFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ProductResponse>call, Throwable t) {
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
         });
 
+
         try {
             if (ProductId != null) {
                 @SuppressWarnings("unchecked")
-                Product product = (Product)cache.getProduct(ProductId);
+                Product product = cache.getProduct(ProductId);
                 if (product != null) {
-                    descProduct.setText(product.description);
-                    nameProduct.setText(product.nom);
+                    loadingLayout.setVisibility(View.GONE);
+                    productLayout.setVisibility(View.VISIBLE);
+                    descProduct.loadData(product.description, "text/html; charset=UTF-8", null);
+                    nameProduct.setText(product.nom.toUpperCase());
                     priceProduct.setText(product.prix + "€");
                     Picasso.with(getContext()).load(getResources().getString(R.string.server_url) +
                             "/images/" + product.image).

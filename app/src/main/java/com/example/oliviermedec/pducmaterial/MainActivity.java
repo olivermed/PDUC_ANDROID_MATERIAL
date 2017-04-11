@@ -1,12 +1,14 @@
 package com.example.oliviermedec.pducmaterial;
 
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +26,6 @@ import com.example.oliviermedec.pducmaterial.Fragment.Categories.CategoriesFragm
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.Panier;
 import com.example.oliviermedec.pducmaterial.Fragment.Panier.PanierFragment;
 import com.example.oliviermedec.pducmaterial.Fragment.Scanner.ScannerFragment;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -92,18 +92,14 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_category) {
-            CategoriesFragment categoriesFragment = new CategoriesFragment();
-            setFragment(categoriesFragment, categoriesFragment.TAG);
+            setFragment(new CategoriesFragment(), CategoriesFragment.TAG);
         } else if (id == R.id.nav_scanner) {
-            ScannerFragment scannerFragment = new ScannerFragment();
-            setFragment(scannerFragment, scannerFragment.TAG);
+            setFragment(new ScannerFragment(), ScannerFragment.TAG);
         } else if (id == R.id.nav_pannier) {
-            PanierFragment panierFragment = new PanierFragment();
-            setFragment(panierFragment, panierFragment.TAG);
+            setFragment(new PanierFragment(), PanierFragment.TAG);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -166,7 +162,17 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View view) {
             //Snackbar.make(view, "Ceci est le boutton pour scanner.", Snackbar.LENGTH_LONG).show();
-            setFragment(ScannerFragment.newInstance(null, null), ScannerFragment.TAG);
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                setFragment(new ScannerFragment(), ScannerFragment.TAG);
+            } else {
+                /*new MaterialDialog.Builder(getApplicationContext())
+                        .title(R.string.error)
+                        .content(R.string.camera_fail)
+                        .positiveText(R.string.agree)
+                        .show();*/
+                System.out.println(getResources().getString(R.string.camera_fail));
+            }
         }
     };
 
@@ -221,19 +227,5 @@ public class MainActivity extends AppCompatActivity
                     }
                 })
                 .show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (scanningResult != null) {
-            String scanContent = scanningResult.getContents();
-
-            String scanFormat = scanningResult.getFormatName();
-
-            System.out.println(scanContent + " :: " + scanFormat);
-        }
     }
 }

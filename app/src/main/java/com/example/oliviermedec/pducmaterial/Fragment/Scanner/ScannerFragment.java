@@ -79,24 +79,19 @@ public class ScannerFragment extends Fragment implements QRCodeReaderView.OnQRCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scanner, container, false);
-        //new IntentIntegrator(getActivity()).initiateScan();
         setAppBarMenu();
         qrCodeReaderView = (QRCodeReaderView) view.findViewById(R.id.qrdecoderview);
         pointsOverlayView = (PointsOverlayView) view.findViewById(R.id.points_overlay_view);
-        //resultTextView = (TextView)view.findViewById(R.id.resultTextView);
         qrCodeReaderView.setOnQRCodeReadListener(this);
-
-        // Use this function to enable/disable decoding
-        qrCodeReaderView.setQRDecodingEnabled(true);
 
         // Use this function to change the autofocus interval (default is 5 secs)
         qrCodeReaderView.setAutofocusInterval(2000L);
 
         // Use this function to enable/disable Torch
-        qrCodeReaderView.setTorchEnabled(false);
+        //qrCodeReaderView.setTorchEnabled(false);
 
         // Use this function to set front camera preview
-        //qrCodeReaderView.setFrontCamera();
+        qrCodeReaderView.setFrontCamera();
 
         // Use this function to set back camera preview
         qrCodeReaderView.setBackCamera();
@@ -132,8 +127,12 @@ public class ScannerFragment extends Fragment implements QRCodeReaderView.OnQRCo
     public void onResume() {
         super.onResume();
         setAppBarMenu();
-        qrCodeReaderView.startCamera();
-        qrCodeReaderView.setQRDecodingEnabled(true);
+        try {
+            qrCodeReaderView.startCamera();
+            qrCodeReaderView.setQRDecodingEnabled(true);
+        } catch (RuntimeException e) {
+            System.out.println("Camera is not accessible !");
+        }
     }
 
     @Override

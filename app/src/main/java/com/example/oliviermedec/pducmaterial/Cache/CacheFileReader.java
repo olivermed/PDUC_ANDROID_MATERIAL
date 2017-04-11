@@ -39,7 +39,6 @@ public class CacheFileReader {
 
                 if (br != null)
                     br.close();
-
                 if (fr != null)
                     fr.close();
             } catch (IOException ex) {

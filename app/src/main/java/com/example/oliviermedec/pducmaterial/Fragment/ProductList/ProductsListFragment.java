@@ -99,7 +99,6 @@ public class ProductsListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
         ApiInterface productInterface = PducAPI.getClient().create(ApiInterface.class);
 
         Call<ProductsResponse> call = productInterface.getProducts(objectId);
@@ -114,9 +113,10 @@ public class ProductsListFragment extends Fragment {
                         Products.add(product);
                     }
                     Log.d(TAG, "Number of products received: " + products.size());
-
-                    mAdapter = new ProductsAdapter(ProductsListFragment.this, Products, getActivity().getApplicationContext());
-                    mRecyclerView.setAdapter(mAdapter);
+                    if (getActivity() != null) {
+                        mAdapter = new ProductsAdapter(ProductsListFragment.this, Products, getActivity());
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
                     try {
                         cache.serealize(Products, objectId);
                     } catch (IOException e) {

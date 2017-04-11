@@ -103,18 +103,20 @@ public class SousCategorieFragment extends Fragment {
 
         call.enqueue(new Callback<CategorieResponse>() {
             @Override
-            public void onResponse(Call<CategorieResponse>call, Response<CategorieResponse> response) {
+            public void onResponse(Call<CategorieResponse> call, Response<CategorieResponse> response) {
                 Log.w(TAG, "Categorie request request finished");
                 Categories = new ArrayList<>();
 
                 List<Categorie> categories = response.body().getResults();
 
-                for (Categorie categorie: categories) {
+                for (Categorie categorie : categories) {
                     Categories.add(categorie);
                 }
                 Log.d(TAG, "Number of categorie received: " + categories.size());
 
-                categorieGridview.setAdapter(new categorieAdapter(SousCategorieFragment.this, Categories));
+                if (getActivity() != null) {
+                    categorieGridview.setAdapter(new categorieAdapter(SousCategorieFragment.this, Categories));
+                }
                 try {
                     cache.serealize(Categories, subCatId);
                 } catch (IOException e) {
@@ -123,11 +125,12 @@ public class SousCategorieFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<CategorieResponse>call, Throwable t) {
+            public void onFailure(Call<CategorieResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
         });
+
 
         List<Categorie> categories = cache.getListCategory(subCatId);
         if (categories != null)

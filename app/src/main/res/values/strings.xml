@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PducMaterial</string>
+    <string name="app_name">Darty</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -29,6 +29,8 @@
     <string name="insert_name_ask">Pour effectuer cette achat, veuillez insérer votre nom et prénom:</string>
     <string name="input_name_hint">Nom et Prénom</string>
     <string name="input_name_prefill"></string>
+    <string name="error">Error</string>
+    <string name="camera_fail">Impossible d\'utiliser la caméra: permission refusé.</string>
 
     <string name="title_activity_welcom">WelcomActivity</string>
     <string name="welcome">Bienvenue chez Darty.</string>
